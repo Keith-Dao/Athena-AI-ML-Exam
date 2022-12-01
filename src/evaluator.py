@@ -27,6 +27,8 @@ class Evaluator:
             torchvision.models.ConvNeXt_Large_Weights,
         ),
     }
+    default_model_choice = "tiny"
+    model_choices = list(model_size_to_model.keys())
 
     def __init__(self, dataset_path: str, model_size: str) -> None:
         model, weights = Evaluator.model_size_to_model[model_size]
