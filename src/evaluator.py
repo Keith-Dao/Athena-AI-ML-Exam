@@ -29,6 +29,10 @@ class Evaluator:
         self.loader = DataLoader(self.dataset, batch_size=32, shuffle=True)
 
         # Model
-        self.model = torchvision.models.get_model(
+        model = torchvision.models.get_model(
             f"convnext_{model_size}", weights="DEFAULT"
-        ).to(self.device)
+        )
+        model.classifier[-1] = torch.nn.Linear(
+            model.classifier[-1].in_features, len(self.dataset.classes)
+        )
+        self.model = model.to(self.device)
