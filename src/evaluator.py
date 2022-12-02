@@ -1,6 +1,7 @@
 """
     Dataset evaluator module.
 """
+from torch.utils.data import DataLoader
 import torchvision
 
 
@@ -32,7 +33,8 @@ class Evaluator:
 
     def __init__(self, dataset_path: str, model_size: str) -> None:
         model, weights = Evaluator.model_size_to_model[model_size]
-        self.model = model(weights=weights.IMAGENET1K_V1)
+        self.model = model(weights=weights.DEFAULT)
         self.dataset = torchvision.datasets.ImageFolder(
-            dataset_path, transform=weights.IMAGENET1K_V1.transforms
+            dataset_path, transform=weights.DEFAULT.transforms()
         )
+        self.data_iter = DataLoader(self.dataset, batch_size=32, shuffle=True)
