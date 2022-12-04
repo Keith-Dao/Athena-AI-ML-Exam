@@ -2,7 +2,6 @@
     Dataset evaluator module.
 """
 import torch
-from torch.utils.data import DataLoader
 import torchvision
 
 
@@ -26,7 +25,6 @@ class Evaluator:
         self.dataset = torchvision.datasets.ImageFolder(
             dataset_path, transform=data_transform()
         )
-        self.loader = DataLoader(self.dataset, batch_size=32, shuffle=True)
 
         # Model
         model = torchvision.models.get_model(
