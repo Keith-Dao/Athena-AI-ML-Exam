@@ -4,6 +4,8 @@
 import torch
 import torchvision
 
+from src.image_folder_dataset import ImageFolderDataset
+
 
 class Inferencer:
     """
@@ -22,7 +24,7 @@ class Inferencer:
         data_transform = torchvision.models.get_weight(
             f"ConvNeXt_{model_size.capitalize()}_Weights.DEFAULT"
         ).transforms
-        self.dataset = torchvision.datasets.ImageFolder(
+        self.dataset = ImageFolderDataset(
             dataset_path, transform=data_transform()
         )
 
@@ -34,9 +36,3 @@ class Inferencer:
             model.classifier[-1].in_features, len(self.dataset.classes)
         )
         self.model = model.to(self.device)
-
-    def predict(self):
-        self.model.eval()
-        print(self.dataset.samples)
-        # for data in self.dataset:
-        #     print(data)
