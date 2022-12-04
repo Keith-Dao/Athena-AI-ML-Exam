@@ -2,7 +2,7 @@
     Module to run the model evaluations.
 """
 import argparse
-from src.evaluator import Evaluator
+from src.inferencer import Inferencer
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -26,9 +26,9 @@ class ArgumentParser(argparse.ArgumentParser):
 
 if __name__ == "__main__":
     parser = ArgumentParser(
-        model_choices=Evaluator.model_choices,
-        default_model_choice=Evaluator.default_model_choice,
+        model_choices=Inferencer.model_choices,
+        default_model_choice=Inferencer.default_model_choice,
     )
     args = parser.parse_args()
 
-    Evaluator(args.path, args.model)
+    Inferencer(args.path, args.model)

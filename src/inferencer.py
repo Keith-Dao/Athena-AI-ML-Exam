@@ -1,13 +1,13 @@
 """
-    Dataset evaluator module.
+    Dataset inferencer module.
 """
 import torch
 import torchvision
 
 
-class Evaluator:
+class Inferencer:
     """
-    Evaluator for a given dataset and model.
+    Inferencer for a given dataset and model.
     """
 
     default_model_choice = "tiny"
@@ -34,3 +34,9 @@ class Evaluator:
             model.classifier[-1].in_features, len(self.dataset.classes)
         )
         self.model = model.to(self.device)
+
+    def predict(self):
+        self.model.eval()
+        print(self.dataset.samples)
+        # for data in self.dataset:
+        #     print(data)
