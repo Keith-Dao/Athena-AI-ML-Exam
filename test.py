@@ -31,4 +31,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    Inferencer(args.path, args.model)
+    inferencer = Inferencer(args.path, args.model)
+    inferencer.infer()

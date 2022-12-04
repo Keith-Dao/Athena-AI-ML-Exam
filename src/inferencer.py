@@ -3,6 +3,7 @@
 """
 import torch
 import torchvision
+from tqdm import tqdm
 
 from src.image_folder_dataset import ImageFolderDataset
 
@@ -36,3 +37,21 @@ class Inferencer:
             model.classifier[-1].in_features, len(self.dataset.classes)
         )
         self.model = model.to(self.device)
+        self.model.eval()  # No training is performed here.
+
+        # Inference data
+        self.confidences = []
+        self.predictions = []
+
+    def infer(self):
+        """
+        Perform inference on the provided data.
+        """
+        print("Performing inference on the provided dataset.")
+        for data, label, path in tqdm(self.dataset):
+            data = data.unsqueeze(0).to(self.device)
+            with torch.no_grad():
+                prediction = torch.max(self.model(data).to("cpu"), dim=-1)
+            self.confidences.append(prediction.values.item())
+            self.predictions.append(prediction.indices.item())
+        print("Inference completed.")
