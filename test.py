@@ -2,6 +2,8 @@
     Module to run the model evaluations.
 """
 import argparse
+
+from src.evaluator import Evaluator
 from src.inferencer import Inferencer
 
 
@@ -31,5 +33,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    inferencer = Inferencer(args.path, args.model)
-    inferencer.infer()
+    evaluator = Evaluator(args.path, args.model)
+    evaluator.run()
