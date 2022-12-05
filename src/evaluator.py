@@ -34,33 +34,51 @@ class Evaluator:
         plt.show(block=False)
 
     # Calibration Error
-    def generate_calibration_error(self) -> None:
+    def get_calibration_bins(self) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
-        Generate all the values need for calibration error.
+        Bin confidence, accuracy and count by the confidence in 10 bins.
+
+        Returns:
+            The average confidence, accuracy and count bins respectively
         """
+        # Constants
         num_bins = 10
         epsilon = 1e-6
+
+        # Bins
         bin_count = torch.zeros(num_bins, dtype=torch.int)
-        confidence_bins = torch.zeros(num_bins, dtype=torch.float)
+        average_confidence_bins = torch.zeros(num_bins, dtype=torch.float)
         accuracy_bins = torch.zeros(num_bins, dtype=torch.float)
 
+        # Data
         confidences = torch.Tensor(self.inferencer.get_confidences())
         true_positives = (
             torch.Tensor(self.inferencer.get_predicted_labels()) ==
             torch.Tensor(self.inferencer.get_true_labels())
         )
 
+        # Bin based on the confidence
         bins = torch.floor(
             (confidences - epsilon) // (1 / num_bins)
         ).to(torch.int)
 
+        # Calculate bin values
         for bin_id in range(num_bins):
             bin_count[bin_id] = (bins == bin_id).sum().item()
             if bin_count[bin_id] > 0:
-                confidence_bins[bin_id] = (
+                average_confidence_bins[bin_id] = (
                     confidences[bins == bin_id]).sum() / bin_count[bin_id]
                 accuracy_bins[bin_id] = (
                     true_positives[bins == bin_id]).sum() / bin_count[bin_id]
+
+        return average_confidence_bins, accuracy_bins, bin_count
+
+    def generate_calibration_error(self) -> None:
+        """
+        Generate all the values need for calibration error.
+        """
+        average_confidence_bins, accuracy_bins, bin_count = \
+            self.get_calibration_bins()
 
     # General
     def run(self) -> None:
