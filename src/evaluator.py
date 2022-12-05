@@ -24,7 +24,8 @@ class Evaluator:
         """
         display_labels = self.inferencer.get_class_labels()
         ConfusionMatrixDisplay.from_predictions(
-            *self.inferencer.get_confusion_matrix_data(),
+            y_true=self.inferencer.get_true_labels(),
+            y_pred=self.inferencer.get_predicted_labels(),
             labels=range(len(display_labels)),
             display_labels=display_labels
         )
