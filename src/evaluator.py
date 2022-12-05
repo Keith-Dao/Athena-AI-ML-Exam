@@ -25,6 +25,7 @@ class Evaluator:
         Generate the confusion matrix.
         """
         print("Generating confusion matrix.")
+
         display_labels = self.inferencer.get_class_labels()
         ConfusionMatrixDisplay.from_predictions(
             y_true=self.inferencer.get_true_labels(),
@@ -32,7 +33,10 @@ class Evaluator:
             labels=range(len(display_labels)),
             display_labels=display_labels
         )
+        figure = plt.gcf()
+        figure.canvas.manager.set_window_title('Confusion matrix')
         plt.show(block=False)
+
         print("Displaying confusion matrix in a new window.")
 
     # Calibration Error
