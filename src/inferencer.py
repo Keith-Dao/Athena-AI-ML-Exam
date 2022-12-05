@@ -57,3 +57,23 @@ class Inferencer:
             self.confidences.append(prediction.values.item())
             self.predictions.append(prediction.indices.item())
         print("Inference completed.")
+
+    def get_confusion_matrix_data(self) -> tuple[list[int], list[int]]:
+        """
+        Gets the data needed to plot a confusion matrix.
+
+        Assumed that the inference step has been ran.
+
+        Returns:
+            A tuple of the actual labels and the predicted labels respectively
+        """
+        return self.dataset.targets, self.predictions
+
+    def get_class_labels(self) -> list[str]:
+        """
+        Gets the class labels.
+
+        Returns:
+            List of the class labels in the same order as the index
+        """
+        return self.dataset.classes
