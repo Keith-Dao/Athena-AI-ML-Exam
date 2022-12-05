@@ -24,6 +24,7 @@ class Evaluator:
         """
         Generate the confusion matrix.
         """
+        print("Generating confusion matrix.")
         display_labels = self.inferencer.get_class_labels()
         ConfusionMatrixDisplay.from_predictions(
             y_true=self.inferencer.get_true_labels(),
@@ -32,6 +33,7 @@ class Evaluator:
             display_labels=display_labels
         )
         plt.show(block=False)
+        print("Displaying confusion matrix in a new window.")
 
     # Calibration Error
     def get_calibration_bins(self) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
