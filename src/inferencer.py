@@ -84,3 +84,12 @@ class Inferencer:
             The predicted labels in the same order as inference.
         """
         return self.predictions
+
+    def get_confidences(self) -> list[float]:
+        """
+        Get the confidence levels.
+
+        Returns:
+            The confidence levels in the same order as inference.
+        """
+        return self.confidences
