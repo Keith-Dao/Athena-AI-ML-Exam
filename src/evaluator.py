@@ -91,20 +91,30 @@ class Evaluator:
         print(f"Maximum calibration error: {maximum_calibration_error}")
 
     # General
+    def print_separator(self) -> None:
+        """
+        Print a separator in the console.
+        """
+        print("\n---\n")
+
     def run(self) -> None:
         """
         Run the evaluation process.
         """
         print("Beginning evaluation.")
+        self.print_separator()
 
         # Inference
         self.inferencer.infer()
+        self.print_separator()
 
         # Confusion matrix
         self.generate_confusion_matrix()
+        self.print_separator()
 
         # Calibration error
         self.generate_calibration_error()
+        self.print_separator()
 
         # Block till all opened windows are closed.
         print("Evaluation completed.")
