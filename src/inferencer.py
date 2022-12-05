@@ -51,7 +51,9 @@ class Inferencer:
         for data, label, path in tqdm(self.dataset):
             data = data.unsqueeze(0).to(self.device)
             with torch.no_grad():
-                prediction = torch.max(self.model(data).to("cpu"), dim=-1)
+                logits = self.model(data)
+                softmax = torch.exp(logits) / torch.sum(torch.exp(logits))
+                prediction = torch.max(softmax.to("cpu"), dim=-1)
             self.confidences.append(prediction.values.item())
             self.predictions.append(prediction.indices.item())
         print("Inference completed.")
