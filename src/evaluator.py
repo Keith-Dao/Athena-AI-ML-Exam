@@ -22,8 +22,9 @@ class Evaluator:
         )
 
         # Create the results folder, if it does not exist
-        if not os.path.exists("results"):
-            os.mkdir("results")
+        self.results_folder = "results"
+        if not os.path.exists(self.results_folder):
+            os.mkdir(self.results_folder)
 
     # Confusion Matrix
     def generate_confusion_matrix(self) -> None:
@@ -85,12 +86,14 @@ class Evaluator:
 
         return average_confidence_bins, accuracy_bins, bin_count
 
-    def display_calibration_graph(self, accuracy_bins: torch.Tensor) -> None:
+    def get_calibration_graph(self, accuracy_bins: torch.Tensor) -> plt.Figure:
         """
-        Display the calibration graph.
+        Get the calibration graph.
 
         Args:
             accuracy_bins (tensor): The accuracy of each confidence bin
+        Returns:
+            The calibration graph figure
         """
 
         num_bins = len(accuracy_bins)
@@ -102,7 +105,6 @@ class Evaluator:
         # Plot
         figure, axis = plt.subplots()
         figure.canvas.manager.set_window_title('Calibration Graph')
-        plt.grid(visible=True, axis="both")
 
         # x axis
         plt.xlabel("Confidence")
@@ -128,9 +130,35 @@ class Evaluator:
             width=0.05,
             label="Actual calibration"
         )
+
+        # Supporting visualisations
+        plt.grid(visible=True, axis="both")
         plt.legend(handles=[calibration_line, accuracy_bars], loc="upper left")
 
-        plt.show(block=False)
+        return figure
+
+    def save_calibration_graph(self, calibration_graph: plt.Figure) -> None:
+        """
+        Saves the calibration graph to the results folder as "calibration_graph.png".
+
+        Note: If the figure is shown in a blocking manner before hand,
+        an empty image would be saved.
+
+        Args:
+            calibration_graph (plt.Figure): The calibration graph to save
+        """
+        save_path = os.path.join(self.results_folder, "calibration_graph.png")
+        calibration_graph.savefig(save_path)
+        print(f"Saved calibration graph to {save_path}")
+
+    def show_calibration_graph(self, calibration_graph: plt.Figure) -> None:
+        """
+        Shows the calibration graph to the results folder as "calibration_graph.png".
+
+        Args:
+            calibration_graph (plt.Figure): The calibration graph to show
+        """
+        calibration_graph.show()
         print("Displaying calibration graph")
 
     def generate_calibration_error(self) -> None:
@@ -148,7 +176,9 @@ class Evaluator:
         print(f"Expected calibration error: {expected_calibration_error}")
         print(f"Maximum calibration error: {maximum_calibration_error}")
 
-        self.display_calibration_graph(accuracy_bins)
+        calibration_graph = self.get_calibration_graph(accuracy_bins)
+        self.save_calibration_graph(calibration_graph)
+        self.show_calibration_graph(calibration_graph)
 
     # General
     def print_separator(self) -> None:
