@@ -82,9 +82,11 @@ class Evaluator:
             bin_count[bin_id] = (bins == bin_id).sum().item()
             if bin_count[bin_id] > 0:
                 average_confidence_bins[bin_id] = (
-                    confidences[bins == bin_id]).sum() / bin_count[bin_id]
+                    (confidences[bins == bin_id]).sum() / bin_count[bin_id]
+                )
                 accuracy_bins[bin_id] = (
-                    true_positives[bins == bin_id]).sum() / bin_count[bin_id]
+                    (true_positives[bins == bin_id]).sum() / bin_count[bin_id]
+                )
 
         return average_confidence_bins, accuracy_bins, bin_count
 
@@ -168,13 +170,17 @@ class Evaluator:
         Generate all the values need for calibration error.
         """
         print("Generating calibration error details.")
-        average_confidence_bins, accuracy_bins, bin_count = \
+        average_confidence_bins, accuracy_bins, bin_count = (
             self.get_calibration_bins()
+        )
 
         expected_calibration_error = torch.sum(
-            (average_confidence_bins - accuracy_bins).abs() * bin_count / bin_count.sum())
+            (average_confidence_bins - accuracy_bins).abs() *
+            bin_count / bin_count.sum()
+        )
         maximum_calibration_error = torch.max(
-            (average_confidence_bins - accuracy_bins).abs())
+            (average_confidence_bins - accuracy_bins).abs()
+        )
         print(f"Expected calibration error: {expected_calibration_error}")
         print(f"Maximum calibration error: {maximum_calibration_error}")
 
