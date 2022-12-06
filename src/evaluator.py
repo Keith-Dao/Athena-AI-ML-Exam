@@ -26,8 +26,13 @@ class Evaluator:
         self.ignore_all_folder_prompts = False
         self.results_folder = "results"
         self.create_folder(self.results_folder)
+        self.false_positive_folder = os.path.join(
+            self.results_folder,
+            "false_positive"
+        )
+        self.create_folder(self.false_positive_folder)
         for label in self.inferencer.get_class_labels():
-            class_path = os.path.join(self.results_folder, label)
+            class_path = os.path.join(self.false_positive_folder, label)
             self.create_folder(class_path)
 
     # Folders
@@ -251,7 +256,7 @@ class Evaluator:
         self.print_separator()
 
         # Inference
-        self.inferencer.infer(save_path=self.results_folder)
+        self.inferencer.infer(save_path=self.false_positive_folder)
         self.print_separator()
 
         # Confusion matrix
