@@ -20,3 +20,12 @@ This repository attempts to implement a model evaluation tool. This includes det
 2. Create and activate a virtual environment using `venv`. [See here for OS specific instructions](https://docs.python.org/3/tutorial/venv.html).
 3. Install the requirements using `pip install -r requirements.txt`.
 4. Copy dataset to a folder in the root of the project.
+
+## Usage
+
+After setup has completed, run:  
+`python test.py <path>`  
+or  
+`python test.py <path> --model <model>`  
+replacing `<path>` with the path to the dataset and `<model>` with the model size (tiny, small, base, large). The model sizes can viewed [here](https://pytorch.org/vision/main/models/convnext.html).
+
