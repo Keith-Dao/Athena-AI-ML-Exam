@@ -2,6 +2,7 @@
     Model and dataset evaluator module.
 """
 import os
+import sys
 
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
@@ -21,16 +22,46 @@ class Evaluator:
             model_size=model_size,
         )
 
-        # Create the results folder, if it does not exist
+        # Results folders
+        self.ignore_all_folder_prompts = False
         self.results_folder = "results"
-        if not os.path.exists(self.results_folder):
-            os.mkdir(self.results_folder)
-
-        # Create the class folders
+        self.create_folder(self.results_folder)
         for label in self.inferencer.get_class_labels():
             class_path = os.path.join(self.results_folder, label)
-            if not os.path.exists(class_path):
-                os.mkdir(class_path)
+            self.create_folder(class_path)
+
+    # Folders
+    def create_folder(self, folder_path: str) -> None:
+        """
+        Create a given folder.
+
+        Args:
+            folder_path (str): The folder path to create
+        """
+        if not os.path.exists(folder_path):
+            os.mkdir(folder_path)
+            return
+
+        if self.ignore_all_folder_prompts:
+            return
+
+        print(
+            f"WARNING: The following directory \"{folder_path}\" already exists. "
+            "Files currently in this directory may be replaced."
+        )
+
+        choice = input(
+            "Would you like to continue? [(Y)es / (N)o / Yes to (A)ll]: ").upper()
+        while choice not in ("Y", "N", "A"):
+            choice = input(
+                "Invalid input. Please enter \"Y\", \"N\" or \"A\": "
+            )
+
+        if choice == "N":
+            sys.exit()
+        if choice == "A":
+            self.ignore_all_folder_prompts = True
+        print()
 
     # Confusion Matrix
     def display_confusion_matrix(self) -> None:
