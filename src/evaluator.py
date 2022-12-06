@@ -1,6 +1,8 @@
 """
     Model and dataset evaluator module.
 """
+import os
+
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
 import torch
@@ -18,6 +20,10 @@ class Evaluator:
             dataset_path=dataset_path,
             model_size=model_size,
         )
+
+        # Create the results folder, if it does not exist
+        if not os.path.exists("results"):
+            os.mkdir("results")
 
     # Confusion Matrix
     def generate_confusion_matrix(self) -> None:
