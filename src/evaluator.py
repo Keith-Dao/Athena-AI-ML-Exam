@@ -79,6 +79,54 @@ class Evaluator:
 
         return average_confidence_bins, accuracy_bins, bin_count
 
+    def display_calibration_graph(self, accuracy_bins: torch.Tensor) -> None:
+        """
+        Display the calibration graph.
+
+        Args:
+            accuracy_bins (tensor): The accuracy of each confidence bin
+        """
+
+        num_bins = len(accuracy_bins)
+        confidence_bins = [
+            confidence / 100
+            for confidence in range(0, 100, 100 // num_bins)
+        ]
+
+        # Plot
+        figure, axis = plt.subplots()
+        figure.canvas.manager.set_window_title('Calibration Graph')
+        plt.grid(visible=True, axis="both")
+
+        # x axis
+        plt.xlabel("Confidence")
+        axis.set_xlim(0, 1)
+        plt.xticks(confidence_bins + [1])
+
+        # y axis
+        plt.ylabel("Accuracy")
+        axis.set_ylim(0, 1)
+        plt.yticks([accuracy / 100 for accuracy in range(0, 101, 10)])
+
+        # Data
+        calibration_line, = plt.plot(
+            [0, 1],
+            [0, 1],
+            "g--",
+            label="Ideal calibration"
+        )
+        accuracy_bars = plt.bar(
+            confidence_bins,
+            accuracy_bins,
+            figure=figure,
+            width=0.05,
+            label="Actual calibration"
+        )
+        plt.legend(handles=[calibration_line, accuracy_bars], loc="upper left")
+
+        plt.show(block=False)
+        print("Displaying calibration graph")
+
     def generate_calibration_error(self) -> None:
         """
         Generate all the values need for calibration error.
@@ -93,6 +141,8 @@ class Evaluator:
             (average_confidence_bins - accuracy_bins).abs())
         print(f"Expected calibration error: {expected_calibration_error}")
         print(f"Maximum calibration error: {maximum_calibration_error}")
+
+        self.display_calibration_graph(accuracy_bins)
 
     # General
     def print_separator(self) -> None:
