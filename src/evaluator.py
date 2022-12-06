@@ -189,6 +189,17 @@ class Evaluator:
         """
         print("\n---\n")
 
+    def wait_from_all_windows(self) -> None:
+        """
+        Wait for all the pyplot windows to be closed before continuing,
+        """
+        if len(plt.get_fignums()) > 0:
+            # Create a dummy window that blocks
+            print("Waiting for all windows to be closed.")
+            plt.show(block=True)
+            plt.close()
+            # Waiting for all existing windows to close before continuing
+
     def run(self) -> None:
         """
         Run the evaluation process.
@@ -201,7 +212,7 @@ class Evaluator:
         self.print_separator()
 
         # Confusion matrix
-        self.generate_confusion_matrix()
+        self.display_confusion_matrix()
         self.print_separator()
 
         # Calibration error
@@ -210,6 +221,5 @@ class Evaluator:
 
         # Block till all opened windows are closed.
         print("Evaluation completed.")
-        print("Waiting for all windows to be closed.")
-        plt.show()
+        self.wait_from_all_windows()
         print("All windows closed. Exiting.")
