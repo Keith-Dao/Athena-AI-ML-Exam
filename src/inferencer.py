@@ -30,13 +30,10 @@ class Inferencer:
         )
 
         # Model
-        model = torchvision.models.get_model(
-            f"convnext_{model_size}", weights="DEFAULT"
-        )
-        model.classifier[-1] = torch.nn.Linear(
-            model.classifier[-1].in_features, len(self.dataset.classes)
-        )
-        self.model = model.to(self.device)
+        self.model = torchvision.models.get_model(
+            f"convnext_{model_size}",
+            num_classes=len(self.dataset.classes)
+        ).to(self.device)
         self.model.eval()  # No training is performed here.
 
         # Inference data
@@ -58,17 +55,6 @@ class Inferencer:
             self.predictions.append(prediction.indices.item())
         print("Inference completed.")
 
-    def get_confusion_matrix_data(self) -> tuple[list[int], list[int]]:
-        """
-        Gets the data needed to plot a confusion matrix.
-
-        Assumed that the inference step has been ran.
-
-        Returns:
-            A tuple of the actual labels and the predicted labels respectively
-        """
-        return self.dataset.targets, self.predictions
-
     def get_class_labels(self) -> list[str]:
         """
         Gets the class labels.
@@ -77,3 +63,30 @@ class Inferencer:
             List of the class labels in the same order as the index
         """
         return self.dataset.classes
+
+    def get_true_labels(self) -> list[int]:
+        """
+        Get the true labels.
+
+        Returns:
+            The true labels in the same order as inference.
+        """
+        return self.dataset.targets
+
+    def get_predicted_labels(self) -> list[int]:
+        """
+        Get the predicted labels.
+
+        Returns:
+            The predicted labels in the same order as inference.
+        """
+        return self.predictions
+
+    def get_confidences(self) -> list[float]:
+        """
+        Get the confidence levels.
+
+        Returns:
+            The confidence levels in the same order as inference.
+        """
+        return self.confidences
