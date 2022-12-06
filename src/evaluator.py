@@ -220,7 +220,7 @@ class Evaluator:
         self.print_separator()
 
         # Inference
-        self.inferencer.infer()
+        self.inferencer.infer(save_path=self.results_folder)
         self.print_separator()
 
         # Confusion matrix
