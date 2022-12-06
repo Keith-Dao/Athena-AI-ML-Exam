@@ -29,3 +29,12 @@ or
 `python test.py <path> --model <model>`  
 replacing `<path>` with the path to the dataset and `<model>` with the model size (tiny, small, base, large). The model sizes can viewed [here](https://pytorch.org/vision/main/models/convnext.html).
 
+## Limitations
+
+### 1. Lack of paralleled operations
+
+This is evident during inferencing as images are not batched before inferencing. This could be improved by using the `DataLoader` class as part of `torch.utils`. Although there may be other aspects of the tool that could be optimised further, it is most notable during inferencing.
+
+### 2. Poor demonstration due to the use of an untrained model
+
+Since weights are not provided to the model, the model is essentially guessing during inferencing. This results in the confusion matrix having a majority of the predictions be the same and the calibration graph only having data for low confidence predictions. Given the context surrounding the purpose of this tool, it would be beneficial to provide the ability to import weights and/or models to allow for more accurate classifications and greater variance of data for the tool to display.
