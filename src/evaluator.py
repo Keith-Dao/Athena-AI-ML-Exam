@@ -27,22 +27,24 @@ class Evaluator:
             os.mkdir(self.results_folder)
 
     # Confusion Matrix
-    def generate_confusion_matrix(self) -> None:
+    def display_confusion_matrix(self) -> None:
         """
-        Generate the confusion matrix.
+        Display the confusion matrix.
         """
         print("Generating confusion matrix.")
 
         display_labels = self.inferencer.get_class_labels()
+        figure, axis = plt.subplots()
+        figure.canvas.manager.set_window_title('Confusion matrix')
+
         ConfusionMatrixDisplay.from_predictions(
             y_true=self.inferencer.get_true_labels(),
             y_pred=self.inferencer.get_predicted_labels(),
             labels=range(len(display_labels)),
-            display_labels=display_labels
+            display_labels=display_labels,
+            ax=axis
         )
-        figure = plt.gcf()
-        figure.canvas.manager.set_window_title('Confusion matrix')
-        plt.show(block=False)
+        figure.show()
 
         print("Displaying confusion matrix in a new window.")
 
