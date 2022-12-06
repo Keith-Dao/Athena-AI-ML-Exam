@@ -1,4 +1,6 @@
-# Athena-AI-ML-Exam
+# Athena AI ML Exam
+
+This repository attempts to implement a model evaluation tool. This includes determining false positives classifications and the calibration details for the dataset and model, such as expected calibration error, max calibration error and a calibration graph. Currently, the tool only supports the ConvNeXt model offered as part of PyTorch's torchvision models ([See the model details here](https://pytorch.org/vision/main/models/convnext.html)).
 
 ## Dependencies
 
