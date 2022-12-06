@@ -30,13 +30,10 @@ class Inferencer:
         )
 
         # Model
-        model = torchvision.models.get_model(
-            f"convnext_{model_size}", weights="DEFAULT"
-        )
-        model.classifier[-1] = torch.nn.Linear(
-            model.classifier[-1].in_features, len(self.dataset.classes)
-        )
-        self.model = model.to(self.device)
+        self.model = torchvision.models.get_model(
+            f"convnext_{model_size}",
+            num_classes=len(self.dataset.classes)
+        ).to(self.device)
         self.model.eval()  # No training is performed here.
 
         # Inference data
