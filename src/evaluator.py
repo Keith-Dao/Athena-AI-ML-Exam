@@ -26,6 +26,12 @@ class Evaluator:
         if not os.path.exists(self.results_folder):
             os.mkdir(self.results_folder)
 
+        # Create the class folders
+        for label in self.inferencer.get_class_labels():
+            class_path = os.path.join(self.results_folder, label)
+            if not os.path.exists(class_path):
+                os.mkdir(class_path)
+
     # Confusion Matrix
     def display_confusion_matrix(self) -> None:
         """
