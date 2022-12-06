@@ -13,3 +13,10 @@ This repository attempts to implement a model evaluation tool. This includes det
 | matplotlib   | 3.6.2          |
 | PyQt5        | 5.15.7         |
 | tqdm         | 4.64.1         |
+
+## Setup
+
+1. Install Python 3.10 or above. At least Python 3.10 is recommended, as some type hints may cause issues with older versions.
+2. Create and activate a virtual environment using `venv`. [See here for OS specific instructions](https://docs.python.org/3/tutorial/venv.html).
+3. Install the requirements using `pip install -r requirements.txt`.
+4. Copy dataset to a folder in the root of the project.
